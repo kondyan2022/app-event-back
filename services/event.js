@@ -29,7 +29,7 @@ const getAll = async (field, direction, page, limit) => {
         totalPage,
         data,
       }),
-      { EX: 30 }
+      { EX: 60 }
     );
   }
   return {
