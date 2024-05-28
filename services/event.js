@@ -5,8 +5,8 @@ const getAll = async (field, direction, page, limit) => {
   const redisKey = JSON.stringify({ field, direction, page, limit });
   if (redisClient.isReady) {
     const value = await redisClient.get(redisKey);
-    console.log(redisClient.isReady);
     if (value) {
+      console.log("Using cache 🥯");
       return JSON.parse(value);
     }
   }
@@ -18,6 +18,7 @@ const getAll = async (field, direction, page, limit) => {
   const itemCount = await Event.countDocuments();
   const totalPage = Math.ceil(itemCount / limit);
   if (redisClient.isReady) {
+    console.log("Saving cache 🍪");
     await redisClient.set(
       redisKey,
       JSON.stringify({
@@ -28,7 +29,7 @@ const getAll = async (field, direction, page, limit) => {
         totalPage,
         data,
       }),
-      { EX: 10 }
+      { EX: 30 }
     );
   }
   return {
